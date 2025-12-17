@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "441873210576",
+    "firebase_url": "https://fitsplit-b51a8-default-rtdb.firebaseio.com",
+    "project_id": "fitsplit-b51a8",
+    "storage_bucket": "fitsplit-b51a8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441873210576:android:97d17f054670dddf7812d5",
+        "android_client_info": {
+          "package_name": "com.fitness.fitsplit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsOAWPFgyOOlorn5o5FdIEtlkv2SE55UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
