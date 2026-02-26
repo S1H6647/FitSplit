@@ -26,23 +26,43 @@ import com.fitness.fitsplit.model.User
 import com.fitness.fitsplit.repository.user.UserRepoImpl
 import com.fitness.fitsplit.navigation.Routes
 import com.fitness.fitsplit.viewModel.UserViewModel
+import com.google.firebase.database.FirebaseDatabase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController) {
     val context = LocalContext.current
     val userViewModel = remember { UserViewModel(repo = UserRepoImpl()) }
+    val currentUser = userViewModel.getCurrentUser()
 
-    // TODO: Replace with actual ViewModel data
-    var user by remember {
-        mutableStateOf(
-            User(
-                id = "123",
-                firstName = "John",
-                lastName = "Doe",
-                email = "john.doe@example.com",
-            )
-        )
+    // Load user data from Firebase
+    var user by remember { mutableStateOf<User?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(currentUser?.uid) {
+        currentUser?.uid?.let { userId ->
+            FirebaseDatabase.getInstance().getReference("users")
+                .child(userId).get()
+                .addOnSuccessListener { snapshot ->
+                    user = User(
+                        id = userId,
+                        firstName = snapshot.child("firstName").getValue(String::class.java),
+                        lastName = snapshot.child("lastName").getValue(String::class.java),
+                        email = snapshot.child("email").getValue(String::class.java)
+                            ?: currentUser.email
+                    )
+                    isLoading = false
+                }
+                .addOnFailureListener {
+                    // Fallback to Auth data
+                    user = User(
+                        id = userId,
+                        firstName = currentUser.displayName,
+                        email = currentUser.email
+                    )
+                    isLoading = false
+                }
+        } ?: run { isLoading = false }
     }
 
     var showUpdateDialog by remember { mutableStateOf(false) }
@@ -64,6 +84,16 @@ fun ProfileScreen(navController: NavController) {
             )
         }
     ) { paddingValues ->
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -76,7 +106,7 @@ fun ProfileScreen(navController: NavController) {
 
             // User Name
             Text(
-                text = user.getFullName(),
+                text = user?.getFullName() ?: currentUser?.displayName ?: "User",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -84,7 +114,7 @@ fun ProfileScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             // Email
-            user.email?.let {
+            (user?.email ?: currentUser?.email)?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyLarge,
@@ -95,7 +125,7 @@ fun ProfileScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(32.dp))
 
             // User Details Card
-            UserDetailsCard(user = user)
+            user?.let { UserDetailsCard(user = it) }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -184,17 +214,25 @@ fun ProfileScreen(navController: NavController) {
                 Text("Logout")
             }
         }
+        } // else
     }
 
     // Update Details Dialog
-    if (showUpdateDialog) {
+    if (showUpdateDialog && user != null) {
         UpdateDetailsDialog(
-            user = user,
+            user = user!!,
             onDismiss = { showUpdateDialog = false },
             onSave = { updatedUser ->
                 user = updatedUser
                 showUpdateDialog = false
-                android.widget.Toast.makeText(context, "Details updated successfully", android.widget.Toast.LENGTH_SHORT).show()
+                // Save to Firebase
+                currentUser?.uid?.let { userId ->
+                    userViewModel.updateProfile(userId, updatedUser) { success, _ ->
+                        if (success) {
+                            Toast.makeText(context, "Details updated successfully", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
         )
     }
