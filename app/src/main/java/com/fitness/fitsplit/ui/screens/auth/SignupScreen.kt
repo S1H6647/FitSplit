@@ -327,6 +327,9 @@ fun SignupScreen(navController: NavController) {
                         userViewModel.register(email, password){
                                 success, message, userId ->
                             if (success){
+                                // Set display name on Firebase Auth
+                                (userViewModel.repo as? UserRepoImpl)?.updateDisplayName(firstName)
+
                                 val model = User(
                                     id = userId,
                                     email = email,

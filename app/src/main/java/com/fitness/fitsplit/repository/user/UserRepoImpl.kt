@@ -42,6 +42,14 @@ class UserRepoImpl : UserRepo {
         }
     }
 
+    fun updateDisplayName(name: String) {
+        val user = auth.currentUser ?: return
+        val profileUpdates = com.google.firebase.auth.UserProfileChangeRequest.Builder()
+            .setDisplayName(name)
+            .build()
+        user.updateProfile(profileUpdates)
+    }
+
     override fun addUserToDatabase(
         userId: String,
         model: User,

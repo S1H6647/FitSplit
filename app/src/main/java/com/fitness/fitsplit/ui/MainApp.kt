@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -15,36 +16,38 @@ import com.fitness.fitsplit.navigation.AppNavGraph
 import com.fitness.fitsplit.navigation.Routes
 import com.fitness.fitsplit.navigation.bottomNavItems
 import com.fitness.fitsplit.navigation.screensWithBottomBar
+import com.fitness.fitsplit.repository.split.SplitRepoImpl
+import com.fitness.fitsplit.viewModel.SplitViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun MainApp(){
+fun MainApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    // Check if user is already logged in
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val startRoute = if (currentUser != null) Routes.DASHBOARD else Routes.LOGIN
 
-    val selectedGraph = when {
-        currentRoute?.startsWith(Routes.DASHBOARD_GRAPH) == true -> Routes.DASHBOARD_GRAPH
-        currentRoute?.startsWith(Routes.SPLIT_GRAPH) == true -> Routes.SPLIT_GRAPH
-        currentRoute?.startsWith(Routes.PROFILE_GRAPH) == true -> Routes.PROFILE_GRAPH
-        else -> Routes.DASHBOARD_GRAPH
-    }
+    // Shared SplitViewModel lifted here so bottom bar can observe hasSplits
+    val splitViewModel = remember { SplitViewModel(repo = SplitRepoImpl()) }
+    val hasSplits by splitViewModel.hasSplits
+    val splitsChecked by splitViewModel.splitsChecked
 
-    val showBottomBar = currentRoute in screensWithBottomBar
-
+    // Show bottom bar only when user has splits AND is on a main screen
+    val showBottomBar = splitsChecked && hasSplits && currentRoute in screensWithBottomBar
 
     Scaffold(
         bottomBar = {
-            if (showBottomBar){
+            if (showBottomBar) {
                 NavigationBar {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentRoute = navBackStackEntry?.destination?.route
-                    Log.d("Check", "$currentRoute")
+                    val entry by navController.currentBackStackEntryAsState()
+                    val route = entry?.destination?.route
 
                     bottomNavItems.forEach { item ->
-                        Log.d("Check", item.graph)
                         NavigationBarItem(
-                            selected = currentRoute == item.graph,
+                            selected = route == item.graph,
                             onClick = {
                                 navController.navigate(item.graph) {
                                     popUpTo(navController.graph.startDestinationId) {
@@ -67,6 +70,11 @@ fun MainApp(){
             }
         }
     ) { innerPadding ->
-        AppNavGraph(navController, topPadding = innerPadding.calculateTopPadding())
+        AppNavGraph(
+            navController = navController,
+            topPadding = innerPadding.calculateTopPadding(),
+            splitViewModel = splitViewModel,
+            startRoute = startRoute
+        )
     }
 }
