@@ -1,0 +1,43 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.fitness.fitsplit.app-mergeDebugResources-53:/values-night-v8/values-night-v8.xml",
+            "map": [
+                {
+                    "source": "/home/s1h/Code/FitSplit/app/src/main/res/values-night/colors.xml",
+                    "from": {
+                        "startLines": "2,3,5,4",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,100,190,148",
+                        "endColumns": "44,47,44,41",
+                        "endOffsets": "95,143,230,185"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,100,148,193",
+                        "endColumns": "44,47,44,41",
+                        "endOffsets": "95,143,188,230"
+                    }
+                },
+                {
+                    "source": "/home/s1h/.gradle/caches/8.13/transforms/991348fa1f3613fb161452ec6cd4ad07/transformed/core-splashscreen-1.0.1/res/values-night-v8/values-night-v8.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "85",
+                        "endOffsets": "136"
+                    },
+                    "to": {
+                        "startLines": "6",
+                        "startColumns": "4",
+                        "startOffsets": "235",
+                        "endColumns": "85",
+                        "endOffsets": "316"
+                    }
+                }
+            ]
+        }
+    ]
+}

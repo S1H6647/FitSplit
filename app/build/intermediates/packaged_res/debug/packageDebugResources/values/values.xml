@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#FFFFFF</color>
+    <color name="brand_primary">#9C27B0</color>
+    <color name="on_surface">#6B4C7A</color>
+    <color name="surface">#FAEDFC</color>
+    <string name="app_name">FitSplit</string>
+    <string name="firebase_database_url" translatable="false">https://fitsplit-b51a8-default-rtdb.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">441873210576</string>
+    <string name="google_api_key" translatable="false">AIzaSyBsOAWPFgyOOlorn5o5FdIEtlkv2SE55UE</string>
+    <string name="google_app_id" translatable="false">1:441873210576:android:97d17f054670dddf7812d5</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBsOAWPFgyOOlorn5o5FdIEtlkv2SE55UE</string>
+    <string name="google_storage_bucket" translatable="false">fitsplit-b51a8.firebasestorage.app</string>
+    <string name="project_id" translatable="false">fitsplit-b51a8</string>
+    <style name="Theme.FitSplit" parent="android:Theme.Material.Light.NoActionBar"/>
+    <style name="Theme.FitSplit.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/surface</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.FitSplit</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.fitness.fitsplit.viewModel.UserViewModelTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-03-01T06:59:53.297Z" hostname="diaphanous" time="0.707">
+  <properties/>
+  <testcase name="test register calls repository logic" classname="com.fitness.fitsplit.viewModel.UserViewModelTest" time="0.705"/>
+  <testcase name="test login calls repository logic" classname="com.fitness.fitsplit.viewModel.UserViewModelTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/home/s1h/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
